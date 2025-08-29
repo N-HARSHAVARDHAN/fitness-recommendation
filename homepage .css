@@ -1,0 +1,107 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* Navbar */
+header {
+  background: #185a9d;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0; /* Remove padding so nav height is consistent */
+  height: 60px; /* Fixed height for consistency */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  left: 20px;
+}
+
+header nav a {
+  color: white;
+  padding: 1rem 1.5rem; /* Makes the hover box tall enough */
+  text-decoration: none;
+  display: inline-flex; 
+/* For vertical centering */
+  align-items: center; /* Center text vertically */
+  height: 100%; /* Fill navbar height */
+}
+
+header nav a:hover {
+  background-color: #333;
+  text-decoration: none;
+}
+
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+              url('dietandfitness.jpg') no-repeat center/cover;
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+}
+.hero h1 {
+  font-size: 2.5rem;
+}
+.hero p {
+  font-size: 1.2rem;
+}
+.btn {
+  display: inline-block;
+  background: #43cea2;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+.btn:hover {
+  background: #2e8b75;
+}
+
+/* Features */
+.features {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+}
+.feature-grid {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.feature {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.feature img {
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+/* Contact */
+.contact {
+  text-align: center;
+  padding: 2rem;
+  background: #eee;
+}
+
+/* Footer */
+footer {
+  background: #185a9d;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}

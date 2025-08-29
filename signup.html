@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<link rel="stylesheet" href="signup.css">
+</head>
+<body>
+<div class="container">
+  <h2>Create Account</h2>
+  
+  <!-- Sign Up Form -->
+  <form action="/signup" method="POST" enctype="multipart/form-data">
+    
+    <!-- Basic details -->
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="password" name="password" placeholder="Password" required>
+    
+    <!-- Profile info -->
+    <input type="number" name="age" placeholder="Age" min="10" max="100" required>
+    
+    <select name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+    
+    <input type="number" step="0.1" name="height" placeholder="Height (cm)" required>
+    <input type="number" step="0.1" name="weight" placeholder="Weight (kg)" required>
+    
+    <select name="goal" required>
+      <option value="">Fitness Goal</option>
+      <option value="weight_loss">Weight Loss</option>
+      <option value="muscle_gain">Muscle Gain</option>
+      <option value="maintain">Maintain Fitness</option>
+    </select>
+
+    <!-- Profile picture -->
+    <label for="profilePic">Upload Profile Picture:</label>
+    <input type="file" id="profilePic" name="profilePic" accept="image/*">
+    
+    <!-- Submit -->
+    <button type="submit">Sign Up</button>
+  </form>
+  
+  <!-- Already have an account -->
+  <p>Already have an account? <a href="/login.html">Login here</a></p>
+  
+  <p id="error-msg" style="color: red; display: none;"></p>
+</div>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const errorMsg = document.getElementById("error-msg");
+    errorMsg.style.display = "none";
+
+    fetch("/signup", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            errorMsg.textContent = data.message;
+            errorMsg.style.display = "block";
+        } else {
+            window.location.href = data.redirect;
+        }
+    })
+    .catch(err => {
+        errorMsg.textContent = "Email already exists!";
+        errorMsg.style.display = "block";
+    });
+});
+</script>
+</body>
+</html>

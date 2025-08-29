@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="login.css">
+</head>
+<body>
+<div class="container">
+  <h2>Login</h2>
+
+  <!-- Error message -->
+  <p id="error-msg" style="color: red; display: none;"></p>
+
+  <form id="loginForm">
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+  <a href="homepage.html">back</a>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const errorMsg = document.getElementById("error-msg");
+    errorMsg.style.display = "none";
+
+    fetch("/login", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            errorMsg.textContent = data.message;
+            errorMsg.style.display = "block";
+        } else {
+            window.location.href = data.redirect;
+        }
+    })
+    .catch(err => {
+        errorMsg.textContent = "Invalid credentials";
+        errorMsg.style.display = "block";
+    });
+});
+</script>
+</body>
+</html>

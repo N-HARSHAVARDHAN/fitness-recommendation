@@ -1,0 +1,78 @@
+/* Remove flex center from body to allow stacking */
+body {
+  margin: 0;
+  padding-top: 70px;  /* make room for navbar */
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff4b1f, #1fddff);
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  height: 60px;
+  background-color: #333;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+.navbar a {
+  color: white;
+  margin: 0 20px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.navbar a:hover {
+  color: #6aa6ff;
+}
+
+/* Profile card */
+.profile-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.profile-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Update form container */
+.update-container {
+  background: #fff;
+  padding: 20px;
+  max-width: 400px;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+form input, form select {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+}
+form button {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #ff4b1f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+form button:hover {
+  background: #e53e14;
+}
+.profile-card { background: #fff; padding: 2rem; border-radius: 12px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+button { margin-top: 1rem; padding: 0.8rem; background: #ff4b1f; color: white; border: none; border-radius: 8px; cursor: pointer; } button:hover { background: #e53e14; } .profile-card img { border-radius: 8px; margin-top: 10px; max-width: 150px; }

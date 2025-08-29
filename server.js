@@ -5,6 +5,9 @@ const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
+const axios = require("axios");   // ✅ changed import to require
+const cors = require("cors");     // ✅ changed import to require
+
 
 const app = express();
 
@@ -33,8 +36,8 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '*****',
-    database: '*****'
+    password: 'harsha',
+    database: 'diet_exercise'
 });
 
 db.connect(err => {
@@ -120,10 +123,41 @@ app.post('/api/update-profile', (req, res) => {
         }
     );
 });
+const TOGETHER_API_KEY = "Your API key";
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.post("/chat", async (req, res) => {
+    try {
+        const response = await axios.post(
+            "https://api.together.xyz/v1/chat/completions",
+            {
+                model: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
+                messages: [{ role: "user", content:req.body.prompt}],
+                max_tokens: 600,
+                temperature: 0.5
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${TOGETHER_API_KEY}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        // Extract the response text
+        let generatedText = response.data.choices[0].message.content;
+        res.json({ code: generatedText.trim() }); 
+    } catch (error) {
+        console.error("Error:", error.response?.data || error.message);
+        res.status(500).json({ error: error.response?.data || error.message });
+    }
+});
+
 
 // ---------------- LOGOUT ----------------
 app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/homepage.html')));
 
 // ---------------- SERVER ----------------
 app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
-

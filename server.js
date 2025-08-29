@@ -33,8 +33,8 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'harsha',
-    database: 'diet_exercise'
+    password: '*****',
+    database: '*****'
 });
 
 db.connect(err => {
@@ -126,3 +126,4 @@ app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/homepa
 
 // ---------------- SERVER ----------------
 app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
+

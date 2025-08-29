@@ -1,8 +1,8 @@
 # 🏋️‍♂️ Fitness Recommendation Web App  
 
 A full-stack web application that provides **fitness recommendations** based on a user’s **height, weight, and goal**.  
-Users can **sign up, log in, view a personalized dashboard, and update their profile**.  
-The system stores user data in **MySQL** and uses a **Node.js server** to handle authentication and profile updates.  
+Users can **sign up, log in, view a personalized dashboard, chat with an AI fitness assistant, and update their profile**.  
+The system stores user data in **MySQL** and uses a **Node.js server** to handle authentication, chatbot responses, and profile updates.  
 
 Recommendations are displayed as **static images** chosen by JavaScript logic for all possible scenarios.  
 
@@ -16,6 +16,7 @@ Recommendations are displayed as **static images** chosen by JavaScript logic fo
 - **Fitness Recommendations** – Static recommendation images displayed dynamically using JS  
 - **Profile Section** – View and update profile (height, weight, goal)  
 - **Dynamic Updates** – Updated recommendations shown after profile changes  
+- **💬 Chatbot** – Floating fitness assistant chatbot connected to the backend  
 
 ---
 
@@ -24,14 +25,13 @@ Recommendations are displayed as **static images** chosen by JavaScript logic fo
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Node.js with Express.js  
 - **Database:** MySQL  
-- **Logic:** JavaScript (static recommendation mapping)  
+- **Logic:** JavaScript (static recommendation mapping + chatbot API)  
 
 ---
 
-
 ## 📂 Project Structure  
 
-```
+
 
 fitness-recommendation/
 │── homepage.html     # Homepage

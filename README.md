@@ -29,22 +29,6 @@ Recommendations are displayed as **static images** chosen by JavaScript logic fo
 
 ---
 
-## 📂 Project Structure  
-
-fitness-recommendation/
-│── homepage.html # Homepage
-│── homepage.css
-│── signup.html # Signup page
-│── signup.css
-│── login.html # Login page
-│── login.css
-│── dashboard.html # User dashboard with recommendations + chatbot
-│── profile.html # Profile details & update form
-│── profile.css
-│── server.js # Express.js server (auth, profile, chatbot APIs)
-│── images/ # Recommendation images
-│── README.md # Project documentation
-
 ## 🤝 Contributing
 
 Pull requests are welcome. For major changes, open an issue first to discuss improvements.

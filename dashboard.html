@@ -3,207 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
-  <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f8f9fa;
-  }
-
-  /* navbar */
-  nav {
-    background: #333;
-    padding: 12px 30px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    height: 50px;
-  }
-  nav a {
-    color: white;
-    margin: 10px 30px 10px 20px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-  nav a:hover { color: #6aa6ff; }
-
-  /* header */
-  .header {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 25px 15px;
-    background: linear-gradient(135deg, #6aa6ff, #1fddff);
-    color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 900;
-  }
-  .header h1 { font-size: 1.8rem; margin-bottom: 0px; }
-  .header p { font-size: 1rem; margin: 0; opacity: 0.95; }
-
-  /* layout */
-  .main-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px; /* content + profile */
-    gap: 25px;
-    margin: 180px 40px 30px;
-    align-items: flex-start;
-  }
-
-  /* ✅ Center content column */
-  .content {
-    justify-self: center;  /* centers inside grid column */
-    max-width: 700px;      /* prevent too wide */
-    width: 100%;
-    text-align: center;
-    padding: 20px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin-left: 300px;
-  }
-
-  .profile-box {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
-    position: sticky;
-    top: 180px;
-  }
-  .profile-box img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 8px;
-  }
-
-  h2 { margin: 15px 0 10px; }
-  .items {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 15px 0;
-    flex-wrap: wrap;
-  }
-  .items img {
-    width: 140px;
-    height: 110px;
-    border-radius: 10px;
-    object-fit: cover;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  }
-
-  /* Floating chat button */
-  .chat-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #6aa6ff;
-    color: white;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1200;
-  }
-
-  /* Chatbot window */
-  .chatbot {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 320px;
-    height: 420px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    font-size: 0.9rem;
-    z-index: 1100;
-    animation: slideUp 0.3s ease;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .chat-header {
-    background: #6aa6ff;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-    position: relative;
-  }
-  .chat-header span {
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  .chat-messages {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-  }
-  .chat-messages div {
-    margin: 6px 0;
-    padding: 8px 12px;
-    border-radius: 8px;
-    max-width: 80%;
-  }
-  .user-msg {
-    background: #6aa6ff;
-    color: white;
-    margin-left: auto;
-    text-align: right;
-  }
-  .bot-msg {
-    background: #f1f1f1;
-    color: black;
-    margin-right: auto;
-    text-align: left;
-  }
-  .chat-input {
-    display: flex;
-    border-top: 1px solid #ddd;
-  }
-  .chat-input input {
-    flex: 1;
-    border: none;
-    padding: 10px;
-    outline: none;
-  }
-  .chat-input button {
-    border: none;
-    background: #6aa6ff;
-    color: white;
-    padding: 10px 15px;
-    cursor: pointer;
-  }
-  </style>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
   <nav>
@@ -229,18 +29,18 @@
   </div>
 
   <!-- Chat button -->
-  <div id="chatButton" class="chat-button">💬</div>
+ <div id="chatButton" class="chat-button">💬</div>
 
   <!-- Chatbot -->
   <div class="chatbot" id="chatbot">
     <div class="chat-header">
       💬 Fitness Assistant
-      <span onclick="toggleChat()">✖</span>
+      <span id="closeChat">✖</span>
     </div>
     <div class="chat-messages" id="chatMessages"></div>
     <div class="chat-input">
       <input type="text" id="chatInput" placeholder="Type your message...">
-      <button onclick="sendMessage()">Send</button>
+      <button id="sendBtn">Send</button>
     </div>
   </div>
 <script>
@@ -368,43 +168,61 @@ function loadProfile() {
 loadProfile();
 
   // Toggle chat window
+document.addEventListener("DOMContentLoaded", () => {
   const chatButton = document.getElementById("chatButton");
   const chatbot = document.getElementById("chatbot");
+  const closeChat = document.getElementById("closeChat");
   const chatMessages = document.getElementById("chatMessages");
   const chatInput = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-  chatButton.addEventListener("click", () => {
-    chatbot.style.display =
-      chatbot.style.display === "none" ? "flex" : "none";
-  });
+  // Toggle chat open
+  chatButton.onclick = () => {
+    chatbot.style.display = "flex";
+    chatInput.focus();
+  };
 
-  // Send message to backend
-  // Send message to backend
-async function sendMessage() {
-  const message = chatInput.value.trim();
-  if (!message) return;
+  // Close chat
+  closeChat.onclick = () => {
+    chatbot.style.display = "none";
+  };
 
-  // Show user message
-  chatMessages.innerHTML += `<div class="user-msg">${message}</div>`;
-  chatInput.value = "";
+  // Send message
+  async function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
 
-  try {
-    const res = await fetch("/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: message })   // ✅ match backend "prompt"
-    });
+    // Add user message
+    chatMessages.innerHTML += `<div class="user-msg">${message}</div>`;
+    chatInput.value = "";
 
-    const data = await res.json();
+    try {
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: message })
+      });
+      const data = await res.json();
 
-    // Show bot reply
-    chatMessages.innerHTML += `<div class="bot-msg">${data.code}</div>`; // ✅ match backend "code"
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  } catch (err) {
-    console.error(err);
-    chatMessages.innerHTML += `<div class="bot-msg">⚠️ Error: could not connect</div>`;
+      chatMessages.innerHTML += `<div class="bot-msg">${data.code}</div>`;
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    } catch (err) {
+      console.error(err);
+      chatMessages.innerHTML += `<div class="bot-msg">⚠️ Error connecting</div>`;
+    }
   }
-}
+
+  // Button click
+  sendBtn.onclick = sendMessage;
+
+  // Enter key
+  chatInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+});
 
 </script>
 

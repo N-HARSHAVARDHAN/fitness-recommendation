@@ -123,37 +123,73 @@ app.post('/api/update-profile', (req, res) => {
         }
     );
 });
-const TOGETHER_API_KEY = "Your API key";
+const Gemini_API_KEY = "your gemini api key";
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/chat", async (req, res) => {
-    try {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  try {
+    // 1. Get user profile from DB
+    db.query(
+      "SELECT name, age, gender, height, weight, goal FROM users WHERE id = ?",
+      [req.session.userId],
+      async (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        if (!results[0]) return res.status(404).json({ error: "User not found" });
+
+        const user = results[0];
+
+        // 2. Build context for Gemini
+        const systemInstruction = `
+You are a helpful fitness and diet assistant.
+Answer only fitness, exercise, and nutrition questions and greetings.
+Base your answers on the user's profile:
+- Name: ${user.name}
+- Age: ${user.age}
+- Gender: ${user.gender}
+- Height: ${user.height} cm
+- Weight: ${user.weight} kg
+- Goal: ${user.goal}
+If the user asks unrelated questions, politely say:
+"I can only help with fitness and diet related questions."
+        `;
+
+        // 3. Send request to Gemini API
         const response = await axios.post(
-            "https://api.together.xyz/v1/chat/completions",
-            {
-                model: "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
-                messages: [{ role: "user", content:req.body.prompt}],
-                max_tokens: 600,
-                temperature: 0.5
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${TOGETHER_API_KEY}`,
-                    "Content-Type": "application/json"
-                }
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+          {
+            contents: [
+              { role: "user", parts: [{ text: systemInstruction }] },
+              { role: "user", parts: [{ text: req.body.prompt }] }
+            ]
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": Gemini_API_KEY
             }
+          }
         );
 
-        // Extract the response text
-        let generatedText = response.data.choices[0].message.content;
-        res.json({ code: generatedText.trim() }); 
-    } catch (error) {
-        console.error("Error:", error.response?.data || error.message);
-        res.status(500).json({ error: error.response?.data || error.message });
-    }
+        console.log("Gemini raw response:", JSON.stringify(response.data, null, 2));
+
+        const generatedText =
+          response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+
+        res.json({ code: generatedText.trim() });
+      }
+    );
+  } catch (error) {
+    console.error("Gemini Error:", error.response?.data || error.message);
+    res.status(500).json({ error: error.response?.data || error.message });
+  }
 });
+
 
 
 // ---------------- LOGOUT ----------------

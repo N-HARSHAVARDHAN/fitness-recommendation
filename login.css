@@ -5,7 +5,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
 }
+
 .container {
   background: white;
   padding: 2rem;
@@ -14,23 +16,31 @@ body {
   width: 100%;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+
 h2 {
   text-align: center;
   color: #185a9d;
 }
+
 input, button {
   width: 100%;
   padding: 0.8rem;
   margin: 0.5rem 0;
   border-radius: 8px;
   border: 1px solid #ccc;
+  box-sizing: border-box; /* ✅ makes widths consistent */
+  font-size: 1rem;
 }
+
 button {
   background: #43cea2;
   color: white;
   border: none;
   cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
 }
+
 button:hover {
   background: #2e8b75;
+  transform: translateY(-2px); /* ✅ subtle lift effect */
 }

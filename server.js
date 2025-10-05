@@ -123,72 +123,154 @@ app.post('/api/update-profile', (req, res) => {
         }
     );
 });
-const Gemini_API_KEY = "your gemini api key";
+const Gemini_API_KEY = "AIzaSyDkRemmIu6UkJO0M8qiVWHnibKJxQ7NpaA";
 
 app.use(cors());
 app.use(bodyParser.json());
-
+// ---------------- CHAT / PLAN ----------------
 app.post("/chat", async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: "Not logged in" });
-  }
+  if (!req.session.userId) return res.status(401).json({ error: "Not logged in" });
+
+  const { prompt, type } = req.body;
 
   try {
-    // 1. Get user profile from DB
-    db.query(
-      "SELECT name, age, gender, height, weight, goal FROM users WHERE id = ?",
-      [req.session.userId],
-      async (err, results) => {
-        if (err) return res.status(500).json({ error: "Database error" });
-        if (!results[0]) return res.status(404).json({ error: "User not found" });
+    // Get user profile
+    const [rows] = await new Promise((resolve, reject) => {
+      db.query(
+        "SELECT name, age, gender, height, weight, goal FROM users WHERE id = ?",
+        [req.session.userId],
+        (err, results) => (err ? reject(err) : resolve([results]))
+      );
+    });
 
-        const user = results[0];
+    const user = rows[0];
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-        // 2. Build context for Gemini
-        const systemInstruction = `
-You are a helpful fitness and diet assistant.
-Answer only fitness, exercise, and nutrition questions and greetings.
-Base your answers on the user's profile:
+    // --- 1️⃣ Generate a chat reply (normal text answer) ---
+    const chatReplyResponse = await axios.post(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+      {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: `
+You are a helpful and knowledgeable fitness assistant.
+User profile:
 - Name: ${user.name}
 - Age: ${user.age}
 - Gender: ${user.gender}
 - Height: ${user.height} cm
 - Weight: ${user.weight} kg
 - Goal: ${user.goal}
-If the user asks unrelated questions, politely say:
-"I can only help with fitness and diet related questions."
-        `;
 
-        // 3. Send request to Gemini API
-        const response = await axios.post(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-          {
-            contents: [
-              { role: "user", parts: [{ text: systemInstruction }] },
-              { role: "user", parts: [{ text: req.body.prompt }] }
-            ]
+Task: Reply conversationally to the user’s question or statement.
+User: ${prompt}
+`,
+              },
+            ],
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-goog-api-key": Gemini_API_KEY
-            }
-          }
-        );
-
-        console.log("Gemini raw response:", JSON.stringify(response.data, null, 2));
-
-        const generatedText =
-          response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
-
-        res.json({ code: generatedText.trim() });
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": Gemini_API_KEY,
+        },
       }
     );
-  } catch (error) {
-    console.error("Gemini Error:", error.response?.data || error.message);
-    res.status(500).json({ error: error.response?.data || error.message });
+
+    const chatReply =
+      chatReplyResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
+      "I'm not sure, could you rephrase that?";
+
+    // --- 2️⃣ Generate plan (diet + workout) like before ---
+    const systemInstruction = `
+You are a fitness assistant.
+User Profile:
+- Name: ${user.name}
+- Age: ${user.age}
+- Gender: ${user.gender}
+- Height: ${user.height} cm
+- Weight: ${user.weight} kg
+- Goal: ${user.goal}
+
+TASK:
+Suggest EXACTLY 3 diet foods and 3 workouts.
+- First diet: fruits/snacks, second: main meal/lunch, third: breakfast/drink
+- First workout: strength, second: cardio, third: yoga
+- Provide short descriptions
+- Output ONLY valid JSON with "food" and "workout" arrays.
+Each item must have "name" and "description".
+`;
+
+    const planResponse = await axios.post(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+      {
+        contents: [
+          { role: "user", parts: [{ text: systemInstruction }] },
+          { role: "user", parts: [{ text: prompt }] },
+        ],
+      },
+      { headers: { "Content-Type": "application/json", "x-goog-api-key": Gemini_API_KEY } }
+    );
+
+    let generatedText =
+      planResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    let plan = { food: [], workout: [] };
+    try {
+      plan = JSON.parse(generatedText);
+    } catch {
+      const match = generatedText.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          plan = JSON.parse(match[0]);
+        } catch {}
+      }
+    }
+
+    // Add static images
+    const staticFoodImages = [
+      "/images/fruits.jpg",
+      "/images/meals.png",
+      "/images/breakfast.png",
+    ];
+    const staticWorkoutImages = [
+      "/images/strength.jpeg",
+      "/images/cardio.jpeg",
+      "/images/yoga.jpeg",
+    ];
+
+    plan.food = (plan.food || []).slice(0, 3).map((item, index) => ({
+      ...item,
+      img: staticFoodImages[index],
+    }));
+
+    plan.workout = (plan.workout || []).slice(0, 3).map((item, index) => ({
+      ...item,
+      img: staticWorkoutImages[index],
+    }));
+
+    // --- 3️⃣ Send both reply + plan ---
+    res.json({
+      reply: chatReply, // text for chatbot window
+      plan: plan, // plan for dashboard
+    });
+  } catch (err) {
+    console.error("Error:", err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
   }
 });
+
+
+
+
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
+
 
 
 

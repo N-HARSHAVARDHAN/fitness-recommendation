@@ -43,7 +43,7 @@ header nav a:hover {
 /* Hero Section */
 .hero {
   background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-              url('images/dietandfitness.jpg') no-repeat center/cover;
+              url('images/dietandfitness.jpeg') no-repeat center/cover;
   color: white;
   text-align: center;
   padding: 5rem 2rem;

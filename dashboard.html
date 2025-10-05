@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,30 +6,48 @@
   <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
+
+  <!-- Navbar -->
   <nav>
     <a href="profile.html">Profile</a>
     <a href="/logout">Logout</a>
   </nav>
 
-  <!-- fixed header -->
+  <!-- Header -->
   <div class="header" id="header">
     <h1>Welcome Back!</h1>
     <p>Your personalized fitness & diet plan is ready 🚀</p>
   </div>
 
+  <!-- Layout -->
   <div class="main-layout">
-    <div class="content">
-      <h2>Here’s Your Plan</h2>
-      <h3>Recommended Food</h3>
-      <div class="items" id="food"></div>
-      <h3>Recommended Workouts</h3>
-      <div class="items" id="workout"></div>
+    <!-- Loading screen -->
+    <div id="loading" class="loading-screen">
+      <div class="spinner"></div>
+      <p>Generating your personalized plan...</p>
     </div>
+
+    <div class="content">
+      <h2  style="color: #6aa6ff;">Here’s Your Plan</h2>
+
+      <!-- Food Section -->
+      <div class="section-container food-section">
+        <h3>🍎 Recommended Food</h3>
+        <div id="food" class="items"></div>
+      </div>
+
+      <!-- Workout Section -->
+      <div class="section-container workout-section">
+        <h3>🏋️ Recommended Workouts</h3>
+        <div id="workout" class="items"></div>
+      </div>
+    </div>
+
     <div class="profile-box" id="profileBox"></div>
   </div>
 
   <!-- Chat button -->
- <div id="chatButton" class="chat-button">💬</div>
+  <div id="chatButton" class="chat-button">💬</div>
 
   <!-- Chatbot -->
   <div class="chatbot" id="chatbot">
@@ -43,114 +61,52 @@
       <button id="sendBtn">Send</button>
     </div>
   </div>
+
 <script>
-function calculateBMI(weight, height) {
-  height = height / 100;
-  return (weight / (height * height)).toFixed(1);
-}
-
-function getPlan(bmi, goal) {
-  let category;
-  if (bmi < 18.5) category = "underweight";
-  else if (bmi >= 18.5 && bmi < 25) category = "normal";
-  else category = "overweight";
-  let plan;
-  if (category === "underweight") {
-    plan = goal === "muscle_gain" ? {
-      food: [
-        { name: "Eggs", img: "images/eggs.jpeg" },
-        { name: "Chicken", img: "images/chicken.jpeg" },
-        { name: "Milk", img: "images/milk.jpeg" }
-      ],
-      workout: [
-        { name: "Weight Lifting", img: "images/weights.jpeg" },
-        { name: "Push-ups", img: "images/pushups.jpeg" },
-        { name: "Squats", img: "images/squats.jpeg" }
-      ]
-    } : {
-      food: [
-        { name: "Rice", img: "images/rice.jpeg" },
-        { name: "Bread", img: "images/bread.jpeg" },
-        { name: "Bananas", img: "images/bananas.jpeg" }
-      ],
-      workout: [
-        { name: "Yoga", img: "images/yoga.jpeg" },
-        { name: "Stretching", img: "images/streching.jpeg" },
-        { name: "Walking", img: "images/waliking.jpeg" }
-      ]
-    };
-  } else if (category === "normal") {
-    plan = goal === "muscle_gain" ? {
-      food: [
-        { name: "Paneer", img: "images/paneer.jpeg" },
-        { name: "Lean Meat", img: "images/chicken.jpeg" },
-        { name: "Nuts", img: "images/nuts.jpeg" }
-      ],
-      workout: [
-        { name: "Bench Press", img: "images/benchpress.jpeg" },
-        { name: "Deadlifts", img: "images/deadlifts.jpeg" },
-        { name: "Pull-ups", img: "images/pullups.jpeg" }
-      ]
-    } : {
-      food: [
-        { name: "Salad", img: "images/salad.jpeg" },
-        { name: "Grilled Fish", img: "images/fish.jpeg" },
-        { name: "Fruits", img: "images/fruits.jpeg" }
-      ],
-      workout: [
-        { name: "Jogging", img: "images/waliking.jpeg" },
-        { name: "Cycling", img: "images/cycling.jpeg" },
-        { name: "Plank", img: "images/plank.jpeg" }
-      ]
-    };
-  } else {
-    plan = goal === "muscle_gain" ? {
-      food: [
-        { name: "High Protein Salad", img: "images/protien salad.jpeg" },
-        { name: "Chicken Breast", img: "images/chicken.jpeg" },
-        { name: "Boiled Eggs", img: "images/eggs.jpeg" }
-      ],
-      workout: [
-        { name: "Strength Training", img: "images/weights.jpeg" },
-        { name: "Resistance Bands", img: "images/babd.jpeg" },
-        { name: "Swimming", img: "images/swimming.jpeg" }
-      ]
-    } : {
-      food: [
-        { name: "Vegetables", img: "images/healthy veg.jpg" },
-        { name: "Oats", img: "images/oats.jpeg" },
-        { name: "Soup", img: "images/soup.jpeg" }
-      ],
-      workout: [
-        { name: "Cardio", img: "images/waliking.jpeg" },
-        { name: "Skipping", img: "images/skipping.jpeg" },
-        { name: "HIIT", img: "images/hiit.jpeg" }
-      ]
-    };
+  // BMI Calculation
+  function calculateBMI(weight, height) {
+    height = height / 100;
+    return (weight / (height * height)).toFixed(1);
   }
-  return plan;
-}
 
-function renderItems(containerId, items) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = items.map(i => `
-    <div>
-      <img src="${i.img}" alt="${i.name}">
-      <p>${i.name}</p>
-    </div>
-  `).join("");
-}
+  // Render Food/Workout Cards
+  function renderItems(containerId, items) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = items.map(i => `
+      <div class="plan-card">
+        <img src="${i.img}" alt="${i.name}">
+        <div class="text">
+          <h4>${i.name}</h4>
+          <p>${i.description || "No description available"}</p>
+        </div>
+      </div>
+    `).join("");
+  }
 
-function loadProfile() {
-  fetch('/api/profile')
-    .then(res => res.json())
-    .then(user => {
+  // Load Profile & Plan
+  async function loadProfile() {
+    try {
+      const resProfile = await fetch('/api/profile');
+      const user = await resProfile.json();
       const bmi = calculateBMI(user.weight, user.height);
-      const plan = getPlan(bmi, user.goal);
+
+      // ✅ Adjusted request (works with new /chat output)
+      const resPlan = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: "Generate plan", type: "plan" })
+      });
+      const data = await resPlan.json();
+
+      const plan = data.plan || { food: [], workout: [] };
+
+      // Render cards
       renderItems("food", plan.food);
       renderItems("workout", plan.workout);
+
+      // Profile box
       document.getElementById("profileBox").innerHTML = `
-        <img src="${user.profile_pic || 'images/default.png'}" alt="Profile">
+        <img src="${user.profile_pic || 'https://via.placeholder.com/150'}" alt="Profile">
         <h3>${user.name}</h3>
         <p>Age: ${user.age}</p>
         <p>Gender: ${user.gender}</p>
@@ -159,71 +115,82 @@ function loadProfile() {
         <p>Goal: ${user.goal}</p>
         <p><strong>BMI: ${bmi}</strong></p>
       `;
+
+      // Header update
       document.getElementById("header").innerHTML = `
         <h1>Welcome Back, ${user.name}!</h1>
         <p>Stay consistent 💪 — your personalized fitness & diet plan is ready 🚀</p>
       `;
-    });
-}
-loadProfile();
 
-  // Toggle chat window
-document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loading").style.display = "none";
+    } catch (err) {
+      console.error(err);
+      document.getElementById("loading").innerHTML = "<p>⚠️ Failed to load plan. Please try again.</p>";
+    }
+  }
+
+  // Chatbot logic
   const chatButton = document.getElementById("chatButton");
   const chatbot = document.getElementById("chatbot");
   const closeChat = document.getElementById("closeChat");
-  const chatMessages = document.getElementById("chatMessages");
-  const chatInput = document.getElementById("chatInput");
   const sendBtn = document.getElementById("sendBtn");
+  const chatInput = document.getElementById("chatInput");
+  const chatMessages = document.getElementById("chatMessages");
 
-  // Toggle chat open
-  chatButton.onclick = () => {
-    chatbot.style.display = "flex";
-    chatInput.focus();
-  };
+  // Open/close chatbot
+  chatButton.addEventListener("click", () => chatbot.style.display = "flex");
+  closeChat.addEventListener("click", () => chatbot.style.display = "none");
 
-  // Close chat
-  closeChat.onclick = () => {
-    chatbot.style.display = "none";
-  };
+  sendBtn.addEventListener("click", sendMessage);
+  chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
 
-  // Send message
   async function sendMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
+    const msg = chatInput.value.trim();
+    if (!msg) return;
 
-    // Add user message
-    chatMessages.innerHTML += `<div class="user-msg">${message}</div>`;
+    const userDiv = document.createElement("div");
+    userDiv.className = "user-msg";
+    userDiv.textContent = msg;
+    chatMessages.appendChild(userDiv);
     chatInput.value = "";
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
     try {
       const res = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: message })
+        body: JSON.stringify({ prompt: msg, type: "plan" })
       });
-      const data = await res.json();
 
-      chatMessages.innerHTML += `<div class="bot-msg">${data.code}</div>`;
+      const data = await res.json();
+      let botReply = data.reply || "I couldn’t process that.";
+
+      if (data.plan) {
+        botReply += "\n\n🍎 A new plan has also been generated! (Check dashboard)";
+      }
+
+      const botDiv = document.createElement("div");
+      botDiv.className = "bot-msg";
+      botDiv.textContent = botReply;
+      chatMessages.appendChild(botDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // ✅ Update plan instantly if Gemini returned one
+      if (data.plan) {
+        renderItems("food", data.plan.food);
+        renderItems("workout", data.plan.workout);
+      }
+
     } catch (err) {
       console.error(err);
-      chatMessages.innerHTML += `<div class="bot-msg">⚠️ Error connecting</div>`;
+      const botDiv = document.createElement("div");
+      botDiv.className = "bot-msg";
+      botDiv.textContent = "⚠️ Error connecting to Gemini.";
+      chatMessages.appendChild(botDiv);
     }
   }
 
-  // Button click
-  sendBtn.onclick = sendMessage;
-
-  // Enter key
-  chatInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-});
-
+  loadProfile();
 </script>
 
 </body>

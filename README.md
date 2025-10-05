@@ -1,42 +1,52 @@
-# 🏋️‍♂️ Fitness Recommendation Web App  
 
-A full-stack web application that provides **fitness recommendations** based on a user’s **height, weight, and goal**.  
-Users can **sign up, log in, view a personalized dashboard, chat with an AI fitness assistant, and update their profile**.  
-The system stores user data in **MySQL** and uses a **Node.js server** to handle authentication, chatbot responses, and profile updates.  
+# 🏋️‍♂️ **Fitness & Diet Recommendation System using AWS and FSD**
 
-Recommendations are displayed as **static images** chosen by JavaScript logic for all possible scenarios.  
+A **full-stack web application** that provides **personalized fitness and diet recommendations** based on a user’s **height, weight, and fitness goal**.
+Users can **sign up, log in, chat with an AI fitness assistant, and view dynamic plans** on their **dashboard**.
+All user data is securely stored in **MySQL**, and backend logic is handled by **Node.js with Express.js**.
 
----
-
-## 🚀 Features  
-
-- **Homepage** – Entry point of the app  
-- **User Authentication** – Sign up and log in (stored in MySQL)  
-- **Dashboard** – Personalized dashboard based on height, weight, and goal  
-- **Fitness Recommendations** – Static recommendation images displayed dynamically using JS  
-- **Profile Section** – View and update profile (height, weight, goal)  
-- **Dynamic Updates** – Updated recommendations shown after profile changes  
-- **💬 Chatbot** – Floating fitness assistant chatbot connected to the backend  
+The chatbot not only provides **customized fitness and diet plans** but also **answers user questions** related to health, workouts, and nutrition.
 
 ---
 
-## 🛠️ Tech Stack  
+## 🚀 **Features**
 
-- **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Node.js with Express.js  
-- **Database:** MySQL  
-- **Logic:** JavaScript (static recommendation mapping + chatbot API)  
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome. For major changes, open an issue first to discuss improvements.
+* 🏠 **Home Page** – Entry point with navigation to login and signup
+* 🔐 **User Authentication** – Sign up and log in using MySQL
+* 📊 **Dashboard** – Personalized view showing fitness and diet plans
+* 🍎 **Fitness & Diet Recommendations** – Dynamically generated based on user profile data
+* 👤 **Profile Management** – View and update height, weight, and fitness goal
+* 💬 **AI Fitness Chatbot** – Responds to user queries and provides plan suggestions
+* ⚡ **Dynamic Updates** – Dashboard refreshes automatically after profile changes
 
 ---
 
-## 📜 License
+## 🧠 **How It Works**
 
-This project is licensed under the MIT License.
+1. User signs up and logs in → details stored in **MySQL**
+2. Dashboard displays recommendations generated from static mappings
+3. Chatbot fetches user data and responds with relevant fitness/diet advice
+4. Users can update profile → instantly refreshes personalized recommendations
 
-```
+---
+
+## 🛠️ **Tech Stack**
+
+* **Frontend:** HTML, CSS, JavaScript
+* **Backend:** Node.js, Express.js
+* **Database:** MySQL
+* **AI Assistant Logic:** JavaScript (custom response system with backend API)
+
+
+## 🤝 **Contributing**
+
+Contributions are welcome!
+For significant updates, please open an issue to discuss proposed changes before submitting a pull request.
+
+---
+
+## 📜 **License**
+
+This project is licensed under the **MIT License**.
+
+---
